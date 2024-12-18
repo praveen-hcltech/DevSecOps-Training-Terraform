@@ -27,5 +27,8 @@ jobs:
         with: 
           terraform_version: ${{ env.TF_VERSION }}
 
+      - name: 'Terraform initialize'
+        run: terraform init
+
       - name: 'Terraform Destroy'
         run: terraform destroy -auto-approve
