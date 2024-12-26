@@ -13,7 +13,7 @@ resource "aws_subnet" "devsecops_subnet_pri" {
 }
 
 resource "aws_internet_gateway" "devsecops_internet_gw" {
-  vpc_id = aws_vpc.devsecops.id
+  vpc_id = aws_vpc.devsecops_vpc_tf.id
 }
 
 resource "aws_route_table" "devsecops_route_table_pub" {
