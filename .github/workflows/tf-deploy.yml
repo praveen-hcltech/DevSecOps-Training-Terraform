@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  terraform:
+  terraform-deploy:
     runs-on: ubuntu-latest
 
     env:
@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: 'Git Checkout'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 'AWS Configure'
         uses: aws-actions/configure-aws-credentials@v1
@@ -23,7 +23,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: 'Setup Terraform'
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v2.0.3
         with: 
           terraform_version: ${{ env.TF_VERSION }}
 
@@ -34,7 +34,7 @@ jobs:
         run: terraform validate
 
       - name: 'Terraform Plan'
-        run: terraform plan -out=tfplan
+        run: terraform plan
 
       - name: 'Terraform Apply'
-        run: terraform apply -auto-approve tfplan
+        run: terraform apply -auto-approve
