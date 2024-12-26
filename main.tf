@@ -1,4 +1,12 @@
 terraform {
+
+  backend "s3" {
+    bucket = "devsecops-tf-s3"
+    key = "networking/terraform.tfstate"
+    region =  "us-east-1"
+    dynamodb_table = "lock-table"
+    encrypt = true
+  }
   required_providers {
     aws = {
       source = "hashicorp/aws"
@@ -11,10 +19,10 @@ provider "aws" {
   region = "us-east-1"
 }
 
-provider "compute" {
+module "compute" {
   source = "./compute"
 }
 
-provider "networking" {
+module "networking" {
   source = "./networking"
 }
