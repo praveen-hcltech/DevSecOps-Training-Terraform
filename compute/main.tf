@@ -1,6 +1,6 @@
-resource "aws_instance" "devsecops_ec2_tf" {
 
-  ami = "ami-0d6560f3176dc9ec0"
+
+resource "aws_instance" "instance" {
+  ami           = "ami-01816d07b1128cd2d"
   instance_type = "t2.micro"
-  
 }
