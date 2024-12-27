@@ -1,40 +1,39 @@
-name: "Terraform Deploy"
-
+name: Terraform Automation
+ 
 on:
-  workflow_dispatch:
+  workflow_dispatch: 
+
+
+permissions:
+  id-token: write
+  contents: read 
 
 jobs:
-  terraform-deploy:
+  OIDC:
     runs-on: ubuntu-latest
-
-    env:
-      AWS_REGION: 'us-east-1'
-      TF_VERSION: '1.4.0'
-
+ 
     steps:
-      - name: 'Git Checkout'
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: 'AWS Configure'
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: arn:aws:iam::597088053471:role/DevSecOps-Training
+          aws-region: us-east-1
+          audience: sts.amazonaws.com
 
-      - name: 'Setup Terraform'
+      - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2.0.3
-        with: 
-          terraform_version: ${{ env.TF_VERSION }}
 
-      - name: 'Terraform init'
+      - name: Terraform Init
         run: terraform init
 
-      - name: 'Terraform Validate'
-        run: terraform validate
-
-      - name: 'Terraform Plan'
+      - name: Terraform Plan
         run: terraform plan
+        
 
-      - name: 'Terraform Apply'
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'  # Only apply for pushes to 'main'
         run: terraform apply -auto-approve
+        
